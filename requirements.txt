@@ -1,0 +1,3 @@
+terra_sdk
+requests
+python-dotenv
