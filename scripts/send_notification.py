@@ -4,29 +4,25 @@ import os
 import requests
 import json
 from dotenv import load_dotenv
+
 load_dotenv()
+
 
 def slack_webhook(msg):
     slack_data = {
-        'blocks': [
-            {
-                'type': 'section',
-                'text': {
-                    'type': 'mrkdwn',
-                    'text': msg
-                }
-            }
-        ]
+        "blocks": [{"type": "section", "text": {"type": "mrkdwn", "text": msg}}]
     }
 
     try:
         response = requests.post(
-            os.getenv('SLACK_WEBHOOK_URL'), data=json.dumps(slack_data),
-            headers={'Content-Type': 'application/json'}, timeout=5
+            os.getenv("SLACK_WEBHOOK_URL"),
+            data=json.dumps(slack_data),
+            headers={"Content-Type": "application/json"},
+            timeout=5,
         )
         if response.status_code != 200:
             raise ValueError(
-                'Request to slack returned an error %s, the response is:\n%s'
+                "Request to slack returned an error %s, the response is:\n%s"
                 % (response.status_code, response.text)
             )
     except Exception:
@@ -34,15 +30,24 @@ def slack_webhook(msg):
 
 
 def telegram_notification(msg):
-    tg_data = {'chat_id': str(os.getenv('TELEGRAM_CHAT_ID')), 'text': msg, 'parse_mode': 'Markdown'}
+    tg_data = {
+        "chat_id": str(os.getenv("TELEGRAM_CHAT_ID")),
+        "text": msg,
+        "parse_mode": "Markdown",
+    }
 
     try:
-        response = requests.post('https://api.telegram.org/bot' + os.getenv('TELEGRAM_TOKEN') + '/sendMessage', data=json.dumps(tg_data),
-            headers={'Content-Type': 'application/json'}, timeout=5
+        response = requests.post(
+            "https://api.telegram.org/bot"
+            + os.getenv("TELEGRAM_TOKEN")
+            + "/sendMessage",
+            data=json.dumps(tg_data),
+            headers={"Content-Type": "application/json"},
+            timeout=5,
         )
         if response.status_code != 200:
             raise ValueError(
-                'Request to slack returned an error %s, the response is:\n%s'
+                "Request to slack returned an error %s, the response is:\n%s"
                 % (response.status_code, response.text)
             )
     except Exception:
@@ -52,11 +57,12 @@ def telegram_notification(msg):
 def notify(message: str):
     print(message)
 
-    if os.getenv('NOTIFY_TELEGRAM'):
+    if os.getenv("NOTIFY_TELEGRAM"):
         telegram_notification(message)
-    if os.getenv('NOTIFY_SLACK'):
+    if os.getenv("NOTIFY_SLACK"):
         slack_webhook(message)
 
+
 def notify_swap(amount: float, token_from: str, price: float):
-    message = f'Sold {amount} {token_from} at a ratio of {price}'
+    message = f"Sold {amount} {token_from} at a ratio of {price}"
     notify(message)
