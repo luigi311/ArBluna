@@ -1,4 +1,5 @@
 # Set to python3
+#!/usr/bin/env python3
 
 import os
 from time import sleep
@@ -30,9 +31,7 @@ def min_ust_check(
             luna_balance, bluna_balance, ust_balance = get_balances()
 
             if ust_balance < min_ust_balance:
-                notify(
-                    f"Error: UST balance of {ust_balance} should be higher\nExiting"
-                )
+                notify(f"Error: UST balance of {ust_balance} should be higher\nExiting")
                 exit(1)
         else:
             notify(
