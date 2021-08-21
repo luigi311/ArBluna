@@ -131,10 +131,12 @@ def bluna_luna_trade(
 
                 exit(1)
 
-            return luna_balance, bluna_balance, ust_balance
+            break
         else:
             # Check twice as often to see if the price is increasing or decreasing
             sleep(sleep_duration / 2)
+
+    return luna_balance, bluna_balance, ust_balance
 
 
 def main():
@@ -174,13 +176,18 @@ def main():
                 notify("Starting to monitor for Luna -> BLuna")
                 flag_start = False
 
-            luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
-                luna_balance, buy_ratio, sleep_duration, min_trade_balance
-            )
+            price = get_ratio("bluna")
+
+            if price > buy_ratio:
+                luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
+                    luna_balance, buy_ratio, sleep_duration, min_trade_balance
+                )
 
             # Check to see if we no longer have enough luna to sell to avoid having to sleep after a sucessful swap
             if luna_balance < min_trade_balance:
                 break
+
+            sleep(sleep_duration)
 
         # Flag to only notify once when monitoring to swap bluna for luna
         flag_start = True
@@ -189,13 +196,17 @@ def main():
                 notify("Starting to monitor for BLuna -> Luna")
                 flag_start = False
 
-            luna_balance, bluna_balance, ust_balance = bluna_luna_trade(
-                bluna_balance, sell_ratio, sleep_duration, min_trade_balance
-            )
+            price = get_ratio("bluna")
+
+            if price < sell_ratio:
+                luna_balance, bluna_balance, ust_balance = bluna_luna_trade(
+                    bluna_balance, sell_ratio, sleep_duration, min_trade_balance
+                )
 
             # Check to see if we no longer have enough bluna to sell to avoid having to sleep after a sucessful swap
             if bluna_balance < min_trade_balance:
                 break
+
             sleep(sleep_duration)
 
 
