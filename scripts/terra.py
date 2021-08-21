@@ -107,7 +107,7 @@ def execute_swap(amount: float, to_token: str, price: float):
     result = terra.tx.broadcast(sendtx)
 
     # Notify the user about the transaction
-    notify_swap(amount, "luna", price)
+    notify_swap(amount / denominator, "luna", price)
 
     return result.txhash
 
