@@ -177,6 +177,7 @@ def main():
 
             price = get_ratio("bluna")
 
+            # When price is less than the buying ratio start checking for price increase and then swap for bluna
             if price < buy_ratio:
                 luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
                     luna_balance, sleep_duration, min_trade_balance
@@ -197,6 +198,7 @@ def main():
 
             price = get_ratio("bluna")
 
+            # When price is greater than the selling ratio start checking for price decrease and then swap for luna
             if price > sell_ratio:
                 luna_balance, bluna_balance, ust_balance = bluna_luna_trade(
                     bluna_balance, sleep_duration, min_trade_balance
