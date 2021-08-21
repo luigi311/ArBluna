@@ -130,7 +130,7 @@ def bluna_luna_trade(
                 exit(1)
             else:
                 return luna_balance, bluna_balance, ust_balance
-            
+
         else:
             # Check twice as often to see if the price is increasing or decreasing
             sleep(sleep_duration / 2)
