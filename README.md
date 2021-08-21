@@ -19,6 +19,7 @@ Automatic arbritage for Bluna on terraswap
 #### With .env
 
 -   Create a .env file similar to .env.sample and set the MNEMONIC variable to your seed phrase
+
 -   Run
 
     ```bash
