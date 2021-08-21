@@ -7,7 +7,7 @@ from terra_sdk.core.auth import StdFee
 from terra_sdk.core.wasm import MsgExecuteContract
 from terra_sdk.exceptions import LCDResponseError
 from scripts.send_notification import notify, notify_swap
-from get_info import get_balance
+from scripts.get_info import get_balance
 from time import sleep
 from dotenv import load_dotenv
 
@@ -134,3 +134,19 @@ def get_balances():
     notify(f"Balance: Luna {luna_balance} | Bluna {bluna_balance} | UST {ust_balance}")
 
     return [luna_balance, bluna_balance, ust_balance]
+
+
+def setup_message():
+    buy_ratio = float(os.getenv("BUY_RATIO"))
+    sell_ratio = float(os.getenv("SELL_RATIO"))
+    min_trade_balance = float(os.getenv("MIN_TRADE_BALANCE"))
+    min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
+    target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
+    sleep_duration = float(os.getenv("SLEEP_DURATION"))
+
+    notify(f"ArBluna - v0.1\nMade by Luigi311\nFeel free to donate here")
+    notify("terra18unmcxtftdkuqzqflzce9nmvyr07wfah43ps2m")
+
+    notify(
+        f"Config\nBuy below {buy_ratio}\nSell above {sell_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
+    )
