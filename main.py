@@ -46,7 +46,6 @@ def min_ust_check(
 
 def luna_bluna_trade(
     luna_balance: float,
-    buy_ratio: float,
     sleep_duration: float,
     min_trade_balance: float,
 ):
@@ -91,7 +90,6 @@ def luna_bluna_trade(
 
 def bluna_luna_trade(
     bluna_balance: float,
-    sell_ratio: float,
     sleep_duration: float,
     min_trade_balance: float,
 ):
@@ -179,9 +177,9 @@ def main():
 
             price = get_ratio("bluna")
 
-            if price > buy_ratio:
+            if price < buy_ratio:
                 luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
-                    luna_balance, buy_ratio, sleep_duration, min_trade_balance
+                    luna_balance, sleep_duration, min_trade_balance
                 )
 
             # Check to see if we no longer have enough luna to sell to avoid having to sleep after a sucessful swap
@@ -199,9 +197,9 @@ def main():
 
             price = get_ratio("bluna")
 
-            if price < sell_ratio:
+            if price > sell_ratio:
                 luna_balance, bluna_balance, ust_balance = bluna_luna_trade(
-                    bluna_balance, sell_ratio, sleep_duration, min_trade_balance
+                    bluna_balance, sleep_duration, min_trade_balance
                 )
 
             # Check to see if we no longer have enough bluna to sell to avoid having to sleep after a sucessful swap
