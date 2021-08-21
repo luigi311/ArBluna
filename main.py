@@ -28,6 +28,8 @@ def min_ust_check(
             notify("Selling some luna for UST")
             execute_swap(amount, "ust", price)
             luna_balance, bluna_balance, ust_balance = get_balances()
+
+            return luna_balance, bluna_balance, ust_balance
         else:
             notify(
                 "Not enough luna to sell while staying above the minimum trade balance"
@@ -150,7 +152,7 @@ def main():
     luna_balance, bluna_balance, ust_balance = get_balances()
 
     while True:
-        min_ust_check(
+        luna_balance, bluna_balance, ust_balance = min_ust_check(
             ust_balance,
             luna_balance,
             min_ust_balance,
