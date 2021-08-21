@@ -29,7 +29,11 @@ def min_ust_check(
             execute_swap(amount, "ust", price)
             luna_balance, bluna_balance, ust_balance = get_balances()
 
-            return luna_balance, bluna_balance, ust_balance
+            if ust_balance < min_ust_balance:
+                notify(
+                    f"Error: UST balance of {ust_balance} should be higher\nExiting"
+                )
+                exit(1)
         else:
             notify(
                 "Not enough luna to sell while staying above the minimum trade balance"
@@ -38,7 +42,7 @@ def min_ust_check(
     else:
         luna_balance, bluna_balance, ust_balance = get_balances()
 
-        return luna_balance, bluna_balance, ust_balance
+    return luna_balance, bluna_balance, ust_balance
 
 
 def luna_bluna_trade(
@@ -151,6 +155,9 @@ def main():
     sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
     setup_message()
+
+    # Get the balances
+    luna_balance, bluna_balance, ust_balance = get_balances()
 
     while True:
         luna_balance, bluna_balance, ust_balance = min_ust_check(
