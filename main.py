@@ -39,7 +39,7 @@ def min_ust_check(
             )
             exit(1)
     else:
-        luna_balance, bluna_balance, ust_balance = get_balances()
+        luna_balance, bluna_balance, ust_balance = get_balances(notify_balance=False)
 
     return luna_balance, bluna_balance, ust_balance
 

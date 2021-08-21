@@ -126,12 +126,15 @@ def check_tx_info(tx_hash: str):
 
 
 # Get the balances of all 3 assets and return it as an array
-def get_balances():
+def get_balances(notify_balance=True):
     luna_balance = get_balance(account_address, "uluna")
     bluna_balance = get_balance(account_address, "bluna")
     ust_balance = get_balance(account_address, "uusd")
 
-    notify(f"Balance: Luna {luna_balance} | Bluna {bluna_balance} | UST {ust_balance}")
+    if notify_balance:
+        notify(
+            f"Balance: Luna {luna_balance} | Bluna {bluna_balance} | UST {ust_balance}"
+        )
 
     return [luna_balance, bluna_balance, ust_balance]
 
