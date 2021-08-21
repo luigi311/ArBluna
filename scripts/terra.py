@@ -144,7 +144,7 @@ def setup_message():
     target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
     sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
-    notify(f"ArBluna - v0.1\nMade by Luigi311\nFeel free to donate here")
+    notify("ArBluna - v0.1\nMade by Luigi311\nFeel free to donate here")
     notify("terra18unmcxtftdkuqzqflzce9nmvyr07wfah43ps2m")
 
     notify(

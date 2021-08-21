@@ -1,5 +1,3 @@
-from scripts.send_notification import notify
-from time import sleep
 import requests
 import os
 from dotenv import load_dotenv
