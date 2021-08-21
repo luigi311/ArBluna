@@ -56,7 +56,7 @@ def luna_bluna_trade(
 
     # Flag to only notify once when the price is below the ratio to start swapping for bluna
     flag_buy = True
-    while minimum < buy_ratio:
+    while True:
         if flag_buy:
             notify("Price is less than threshold\nMonitoring for price increase")
             flag_buy = False
@@ -82,8 +82,8 @@ def luna_bluna_trade(
                 notify(f"Error: Luna balance of {luna_balance} should be low\nExiting")
                 notify(f"tx_info: {tx_info}")
                 exit(1)
-
-            return luna_balance, bluna_balance, ust_balance
+            else:
+                return luna_balance, bluna_balance, ust_balance
         else:
             # Check twice as often to see if the price is increasing or decreasing
             sleep(sleep_duration / 2)
@@ -101,7 +101,7 @@ def bluna_luna_trade(
 
     # Flag to only notify once when the price is above the ratio to start swapping for luna
     flag_sell = True
-    while maximum > sell_ratio:
+    while True:
         if flag_sell:
             notify("Price is greater than threshold\nMonitoring for price decrease")
             flag_sell = False
@@ -130,13 +130,14 @@ def bluna_luna_trade(
                 notify(f"tx_info: {tx_info}")
 
                 exit(1)
-
-            break
+            else:
+                return luna_balance, bluna_balance, ust_balance
+            
         else:
             # Check twice as often to see if the price is increasing or decreasing
             sleep(sleep_duration / 2)
 
-    return luna_balance, bluna_balance, ust_balance
+    
 
 
 def main():
