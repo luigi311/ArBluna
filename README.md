@@ -1,4 +1,5 @@
 # ArBluna
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/00463263f34c433e9ab5e7c8e205bdba)](https://www.codacy.com/gh/luigi311/ArBluna/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=luigi311/ArBluna&amp;utm_campaign=Badge_Grade)  
 
 Automatic arbritage for Bluna on terraswap
 
