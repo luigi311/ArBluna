@@ -58,6 +58,7 @@ def execute_swap(amount: float, to_token: str, price: float):
                 coins=coins,
             ),
         )
+        sold_token = "luna"
     # When swapping to luna, create structure for contract token to native token swap
     # Must point to luna_bluna_pair_address, it will automatically pull in the bLuna coin and send the luna to the sender address
     elif to_token == "luna":
@@ -75,6 +76,7 @@ def execute_swap(amount: float, to_token: str, price: float):
                 coins=Coins(),
             ),
         )
+        sold_token = "bluna"
     # When swapping to ust, create structure for native token to native token swap
     # Must point to luna_ust_pair_address, must provide the luna coins and send it will send the UST to the sender address
     elif to_token == "uusd":
@@ -95,6 +97,7 @@ def execute_swap(amount: float, to_token: str, price: float):
                 coins=coins,
             ),
         )
+        sold_token = "luna"
     else:
         print("Invalid Token")
         exit(1)
@@ -107,7 +110,7 @@ def execute_swap(amount: float, to_token: str, price: float):
     result = terra.tx.broadcast(sendtx)
 
     # Notify the user about the transaction
-    notify_swap(amount / denominator, "luna", price)
+    notify_swap(amount / denominator, sold_token, price)
 
     return result.txhash
 

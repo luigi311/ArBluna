@@ -69,7 +69,7 @@ def luna_bluna_trade(
 
         # If the price starts to increase swap for bluna
         if price > minimum:
-            notify(f"Final: {price}\nExecuting trade")
+            notify("Executing trade")
             tx_hash = execute_swap(luna_balance, "bluna", price)
             tx_info = check_tx_info(tx_hash)
 
@@ -113,7 +113,7 @@ def bluna_luna_trade(
 
         # If the price starts to decrease swap for luna
         if price < maximum:
-            notify(f"Final: {price}\nExecuting trade")
+            notify("Executing trade")
             tx_hash = execute_swap(bluna_balance, "luna", price)
             tx_info = check_tx_info(tx_hash)
 
