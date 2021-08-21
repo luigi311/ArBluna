@@ -58,14 +58,14 @@ def main():
 
             # Get luna to BLuna price
             price = get_ratio("bluna")
-            min = price
+            minimum = price
 
             # Flag to only notify once when the price is below the ratio to start swapping for bluna
             flag_buy = True
-            while min < buy_ratio:
+            while minimum < buy_ratio:
                 if flag_buy:
                     notify(
-                        f"Price is less than threshold\nMonitoring for price increase"
+                        "Price is less than threshold\nMonitoring for price increase"
                     )
                     flag_buy = False
 
@@ -73,11 +73,11 @@ def main():
                 price = get_ratio("bluna")
 
                 # If the price is still decreasing keep waiting
-                if price < min:
-                    min = price
+                if price < minimum:
+                    minimum = price
 
                 # If the price starts to increase swap for bluna
-                if price > min:
+                if price > minimum:
                     notify(f"Final: {price}\nExecuting trade")
                     tx_hash = execute_swap(luna_balance, "bluna", price)
                     tx_info = check_tx_info(tx_hash)
@@ -113,14 +113,14 @@ def main():
 
             # Get BLuna to LUNA price
             price = get_ratio("bluna")
-            max = price
+            maximum = price
 
             # Flag to only notify once when the price is above the ratio to start swapping for luna
             flag_sell = True
-            while max > sell_ratio:
+            while maximum > sell_ratio:
                 if flag_sell:
                     notify(
-                        f"Price is greater than threshold\nMonitoring for price decrease"
+                        "Price is greater than threshold\nMonitoring for price decrease"
                     )
                     flag_sell = False
 
@@ -128,11 +128,11 @@ def main():
                 price = get_ratio("bluna")
 
                 # If the price is still increasing keep waiting
-                if price > max:
-                    max = price
+                if price > maximum:
+                    maximum = price
 
                 # If the price starts to decrease swap for luna
-                if price < max:
+                if price < maximum:
                     notify(f"Final: {price}\nExecuting trade")
                     tx_hash = execute_swap(bluna_balance, "luna", price)
                     tx_info = check_tx_info(tx_hash)
