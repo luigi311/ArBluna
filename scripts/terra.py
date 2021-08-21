@@ -28,7 +28,7 @@ wallet = terra.wallet(mk)
 account_address = wallet.key.acc_address
 
 
-def execute_swap(amount: float, to_token: str, price: float, wallet: any):
+def execute_swap(amount: float, to_token: str, price: float):
     # Convert token amount to amount needed by terra
     amount = int(amount * denominator)
 
