@@ -35,6 +35,10 @@ def min_ust_check(
                 "Not enough luna to sell while staying above the minimum trade balance"
             )
             exit(1)
+    else:
+        luna_balance, bluna_balance, ust_balance = get_balances()
+
+        return luna_balance, bluna_balance, ust_balance
 
 
 def luna_bluna_trade(
@@ -147,9 +151,6 @@ def main():
     sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
     setup_message()
-
-    # Get balances for all three currencies
-    luna_balance, bluna_balance, ust_balance = get_balances()
 
     while True:
         luna_balance, bluna_balance, ust_balance = min_ust_check(
