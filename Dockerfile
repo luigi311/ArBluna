@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.9
+FROM python:3.9-slim
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-ENV BUY_RATIO=0.94
-ENV SELL_RATIO=0.96
+ENV LUNA_TO_BLUNA_RATIO=0.94
+ENV BLUNA_TO_LUNA_RATIO=0.96
 ENV MIN_TRADE_BALANCE=0.01
 ENV MIN_UST_BALANCE=3
 ENV TARGET_UST_BALANCE=5
