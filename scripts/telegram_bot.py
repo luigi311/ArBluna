@@ -1,6 +1,5 @@
 import os
 import distutils.util
-from scripts.send_notification import notify
 
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, Filters, CallbackContext

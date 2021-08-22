@@ -15,10 +15,10 @@ def get_ratio(to_token: str, amount: float):
     value = 0
     bluna = luna = ust = None
 
-    if amount==0:
+    if amount == 0:
         amount = str(denominator)
     else:
-        amount = str(int(amount*denominator))
+        amount = str(int(amount * denominator))
 
     luna_ust_pair_address = os.getenv("LUNA_UST_PAIR_ADDRESS")
     luna_bluna_pair_address = os.getenv("LUNA_BLUNA_PAIR_ADDRESS")
@@ -26,31 +26,41 @@ def get_ratio(to_token: str, amount: float):
     # Luna to BLuna
     if to_token.lower() == "bluna":
         contract_address = luna_bluna_pair_address
-        query_msg = '{"simulation":{"offer_asset":{"amount":"'+ amount +'","info":{"native_token":{"denom":"uluna"}}}}}'
+        query_msg = (
+            '{"simulation":{"offer_asset":{"amount":"'
+            + amount
+            + '","info":{"native_token":{"denom":"uluna"}}}}}'
+        )
 
     # Bluna to Luna
     elif to_token.lower() == "luna":
         contract_address = luna_bluna_pair_address
-        query_msg = '{"simulation":{"offer_asset":{"amount":"'+ amount +'","info":{"token":{"contract_addr":"terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp"}}}}}'
-
+        query_msg = (
+            '{"simulation":{"offer_asset":{"amount":"'
+            + amount
+            + '","info":{"token":{"contract_addr":"terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp"}}}}}'
+        )
 
     # Luna to UST
     elif to_token.lower() == "ust":
         contract_address = luna_ust_pair_address
-        query_msg = '{"simulation":{"offer_asset":{"amount":"'+ amount +'","info":{"native_token":{"denom":"uluna"}}}}}'
-
+        query_msg = (
+            '{"simulation":{"offer_asset":{"amount":"'
+            + amount
+            + '","info":{"native_token":{"denom":"uluna"}}}}}'
+        )
 
     response = requests.get(
         public_node_url + "/wasm/contracts/" + contract_address + "/store",
         params={"query_msg": query_msg},
     ).json()
-    
+
     # Luna to BLuna
     if to_token.lower() == "bluna":
         luna = float(amount)
         bluna = float(response["result"]["return_amount"])
         value = bluna / luna
-    
+
     # Bluna to Luna
     elif to_token.lower() == "luna":
         luna = float(response["result"]["return_amount"])
@@ -68,7 +78,7 @@ def get_ratio(to_token: str, amount: float):
 
 def get_balance(account_address: str, token: str):
     bluna_contract = os.getenv("BLUNA_CONTRACT")
-    
+
     value = 0
 
     # If checking a native token then we can just pull the bank balance of the account
