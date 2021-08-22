@@ -6,7 +6,7 @@ from telegram.ext import Updater, CommandHandler, Filters, CallbackContext
 from dotenv import load_dotenv
 
 from scripts.get_info import get_ratio
-from scripts.terra import get_balances
+from scripts.terra import get_balances, execute_swap
 
 load_dotenv()
 notify_telegram = bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM")))
@@ -43,6 +43,26 @@ def ust_command(update: Update, context: CallbackContext) -> None:
 def balance_command(update: Update, context: CallbackContext) -> None:
     """Send the current balances of the account"""
     get_balances()
+
+
+def swap_to_bluna_command(update: Update, context: CallbackContext) -> None:
+    """Force swap to bluna"""
+    price = get_ratio("bluna")
+    luna_balance, bluna_balance, ust_balance = get_balances()
+    if luna_balance > 0 and ust_balance > 0.15:
+        execute_swap(luna_balance, "bluna", price)
+    else:
+        raise Exception(f"Not enough luna {luna_balance} or ust {ust_balance}")
+
+
+def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
+    """Force swap to luna"""
+    price = get_ratio("bluna")
+    luna_balance, bluna_balance, ust_balance = get_balances()
+    if bluna_balance > 0 and ust_balance > 0.15:
+        execute_swap(bluna_balance, "luna", price)
+    else:
+        raise Exception(f"Not enough bluna {bluna_balance} or ust {ust_balance}")
 
 
 def setup_bot() -> None:
@@ -86,6 +106,20 @@ def setup_bot() -> None:
             CommandHandler(
                 "balances",
                 balance_command,
+                filters=Filters.chat(chat_id=telegram_chat_id),
+            )
+        )
+        dispatcher.add_handler(
+            CommandHandler(
+                "swap_to_bluna",
+                swap_to_bluna_command,
+                filters=Filters.chat(chat_id=telegram_chat_id),
+            )
+        )
+        dispatcher.add_handler(
+            CommandHandler(
+                "swap_to_luna",
+                swap_to_luna_command,
                 filters=Filters.chat(chat_id=telegram_chat_id),
             )
         )
