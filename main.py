@@ -18,6 +18,7 @@ min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
 target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
 sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
+
 def min_ust_check(
     ust_balance: float,
     luna_balance: float,
@@ -143,8 +144,6 @@ def bluna_luna_trade(
         else:
             # Check twice as often to see if the price is increasing or decreasing
             sleep(sleep_duration / 2)
-
-    
 
 
 def main():

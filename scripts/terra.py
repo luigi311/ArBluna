@@ -143,8 +143,8 @@ def get_balances(notify_balance=True):
 
 
 def setup_message():
-    buy_ratio = float(os.getenv("BUY_RATIO"))
-    sell_ratio = float(os.getenv("SELL_RATIO"))
+    luna_to_bluna_ratio = float(os.getenv("LUNA_TO_BLUNA_RATIO"))
+    bluna_to_luna_ratio = float(os.getenv("BLUNA_TO_LUNA_RATIO"))
     min_trade_balance = float(os.getenv("MIN_TRADE_BALANCE"))
     min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
     target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
@@ -154,5 +154,5 @@ def setup_message():
     notify("terra18unmcxtftdkuqzqflzce9nmvyr07wfah43ps2m")
 
     notify(
-        f"Config\nBuy below {buy_ratio}\nSell above {sell_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
+        f"Config\nConverting luna to bluna below {luna_to_bluna_ratio}\nConverting bluna to luna above {bluna_to_luna_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
     )
