@@ -104,9 +104,10 @@ def execute_swap(amount: float, to_token: str, price: float):
 
     # Set fee to $0.15 UST, needs to be int to remove any decimals before casting to string
     fee = str(int(0.15 * denominator)) + "uusd"
+    memo_msg = "ArBluna - https://github.com/luigi311/ArBluna/tree/main"
 
     # Send transaction to execute contract
-    sendtx = wallet.create_and_sign_tx(send, fee=StdFee(denominator, fee))
+    sendtx = wallet.create_and_sign_tx(send, fee=StdFee(denominator, fee), memo=memo_msg)
     result = terra.tx.broadcast(sendtx)
 
     # Notify the user about the transaction
