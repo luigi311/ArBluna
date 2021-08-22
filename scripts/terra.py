@@ -155,5 +155,5 @@ def setup_message():
     notify("terra18unmcxtftdkuqzqflzce9nmvyr07wfah43ps2m")
 
     notify(
-        f"Config\nConverting luna to bluna below {luna_to_bluna_ratio}\nConverting bluna to luna above {bluna_to_luna_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
+        f"Config\nConverting luna to bluna above {luna_to_bluna_ratio}\nConverting bluna to luna above {bluna_to_luna_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
     )

@@ -33,7 +33,7 @@ def min_ust_check(
     if ust_balance < min_ust_balance:
         notify("UST balance is less than the minimum set")
         # Get luna to UST price
-        price = get_ratio("ust")
+        price = get_ratio("ust", luna_balance)
         # Calculate how much luna to sell to get to target UST balance
         amount = target_ust_balance / price
 
@@ -65,10 +65,10 @@ def luna_bluna_trade(
     min_trade_balance: float,
 ):
     # Get luna to BLuna price
-    price = get_ratio("bluna")
-    minimum = price
+    price = get_ratio("bluna", luna_balance)
+    maximum = price
 
-    # Flag to only notify once when the price is below the ratio to start swapping for bluna
+    # Flag to only notify once when the price is above the ratio to start swapping for bluna
     flag_buy = True
     while True:
         if flag_buy:
@@ -76,14 +76,14 @@ def luna_bluna_trade(
             flag_buy = False
 
         # Continously check the price to see if the price is decreasing or increase
-        price = get_ratio("bluna")
+        price = get_ratio("bluna", luna_balance)
 
-        # If the price is still decreasing keep waiting
-        if price < minimum:
-            minimum = price
+        # If the price is still increasing keep waiting
+        if price > maximum:
+            maximum = price
 
-        # If the price starts to increase swap for bluna and price is still below the target ratio
-        if price > minimum and price < luna_to_bluna_ratio:
+        # If the price starts to decrease and price is still above the target ratio swap for bluna
+        if price < maximum and price > luna_to_bluna_ratio:
             notify("Executing trade")
             tx_hash = execute_swap(luna_balance, "bluna", price)
             tx_info = check_tx_info(tx_hash)
@@ -111,7 +111,7 @@ def bluna_luna_trade(
     min_trade_balance: float,
 ):
     # Get BLuna to LUNA price
-    price = get_ratio("bluna")
+    price = get_ratio("luna", bluna_balance)
     maximum = price
 
     # Flag to only notify once when the price is above the ratio to start swapping for luna
@@ -122,7 +122,7 @@ def bluna_luna_trade(
             flag_sell = False
 
         # Continously check the price to see if the price is increasing or decreasing
-        price = get_ratio("bluna")
+        price = get_ratio("luna", bluna_balance)
 
         # If the price is still increasing keep waiting
         if price > maximum:
@@ -183,10 +183,10 @@ def main() -> None:
                 notify("Starting to monitor for Luna -> BLuna")
                 flag_start = False
 
-            price = get_ratio("bluna")
+            price = get_ratio("bluna", luna_balance)
 
-            # When price is less than the buying ratio start checking for price increase and then swap for bluna
-            if price < luna_to_bluna_ratio:
+            # When price is greater than the buying ratio start checking for price increase and then swap for bluna
+            if price > luna_to_bluna_ratio:
                 luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
                     luna_balance, sleep_duration, min_trade_balance
                 )
@@ -204,7 +204,7 @@ def main() -> None:
                 notify("Starting to monitor for BLuna -> Luna")
                 flag_start = False
 
-            price = get_ratio("bluna")
+            price = get_ratio("luna", bluna_balance)
 
             # When price is greater than the selling ratio start checking for price decrease and then swap for luna
             if price > bluna_to_luna_ratio:
