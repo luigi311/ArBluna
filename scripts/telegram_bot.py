@@ -22,7 +22,7 @@ def ping_command(update: Update, context: CallbackContext) -> None:
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /ping is issued."""
+    """Send list of commands when /help is issued."""
     update.message.reply_text(
         "Commands:\n/ping check if thebot is online\n/bluna get the bluna ratio\n/ust get the ust ratio\n/balance get the balances"
     )
@@ -41,6 +41,7 @@ def ust_command(update: Update, context: CallbackContext) -> None:
 
 
 def balance_command(update: Update, context: CallbackContext) -> None:
+    """Send the current balances of the account"""
     get_balances()
 
 
@@ -92,9 +93,5 @@ def setup_bot() -> None:
         # Start the Bot
         updater.start_polling()
 
-        # Run the bot until you press Ctrl-C or the process receives SIGINT,
-        # SIGTERM or SIGABRT. This should be used most of the time, since
-        # start_polling() is non-blocking and will stop the bot gracefully.
-        # updater.idle()
     except Exception as e:
         raise Exception(f"Telegram bot error: {e}")
