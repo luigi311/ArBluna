@@ -44,4 +44,16 @@ Automatic arbritage for Bluna on terraswap
     python main.py
     ```
 
+### Telegram Bot
+
+When using the notify_telegram option, you can use the following commands with the telegram bot:
+
+-   /help - Show this help message
+-   /ping - Check if the bot is running
+-   /bluna - Check the current Luna to Bluna ratio
+-   /ust - Check the current Luna to UST ratio
+-   /balance - Check the current balances
+-   /swap_to_bluna - To force a swap from luna to bluna
+-   /swap_to_luna - To force a swap from bluna to luna
+
 ## Shoutout to <https://github.com/unl1k3ly/AnchorHODL> that was used as a base for this project
