@@ -50,7 +50,7 @@ def min_ust_check(
                 raise Exception(message)
         else:
             message = (
-                f"Not enough luna to sell while staying above the minimum trade balance"
+                "Not enough luna to sell while staying above the minimum trade balance"
             )
             raise Exception(message)
     else:

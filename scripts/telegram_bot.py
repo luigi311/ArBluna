@@ -29,24 +29,24 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 
 def bluna_command(update: Update, context: CallbackContext) -> None:
-    """Send the current luna to bluna ratio"""
+    """Send the current luna to bluna ratio."""
     bluna = get_ratio("bluna")
     update.message.reply_text(f"Luna to Bluna ratio: {bluna}")
 
 
 def ust_command(update: Update, context: CallbackContext) -> None:
-    """Send the current luna to bluna ratio"""
+    """Send the current luna to bluna ratio."""
     bluna = get_ratio("ust")
     update.message.reply_text(f"Luna to UST price: {bluna}")
 
 
 def balance_command(update: Update, context: CallbackContext) -> None:
-    """Send the current balances of the account"""
+    """Send the current balances of the account."""
     get_balances()
 
 
 def swap_to_bluna_command(update: Update, context: CallbackContext) -> None:
-    """Force swap to bluna"""
+    """Force swap to bluna."""
     price = get_ratio("bluna")
     luna_balance, bluna_balance, ust_balance = get_balances()
     if luna_balance > 0 and ust_balance > 0.15:
@@ -56,7 +56,7 @@ def swap_to_bluna_command(update: Update, context: CallbackContext) -> None:
 
 
 def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
-    """Force swap to luna"""
+    """Force swap to luna."""
     price = get_ratio("bluna")
     luna_balance, bluna_balance, ust_balance = get_balances()
     if bluna_balance > 0 and ust_balance > 0.15:
@@ -67,7 +67,6 @@ def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
 
 def setup_bot() -> None:
     try:
-        """Start the bot."""
         # Create the Updater and pass it your bot's token.
         updater = Updater(token, use_context=True)
 
