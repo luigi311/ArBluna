@@ -1,3 +1,4 @@
 terra_sdk
 requests
 python-dotenv
+python-telegram-bot[ujson]

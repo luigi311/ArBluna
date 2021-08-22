@@ -1,8 +1,7 @@
 # Source https://raw.githubusercontent.com/unl1k3ly/AnchorHODL/main/send_notification.py
 
-import os
-import requests
-import json
+import os, requests, json
+import distutils.util
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -57,9 +56,9 @@ def telegram_notification(msg):
 def notify(message: str):
     print(message)
 
-    if os.getenv("NOTIFY_TELEGRAM"):
+    if bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM"))):
         telegram_notification(message)
-    if os.getenv("NOTIFY_SLACK"):
+    if bool(distutils.util.strtobool(os.getenv("NOTIFY_SLACK"))):
         slack_webhook(message)
 
 

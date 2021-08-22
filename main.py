@@ -1,10 +1,12 @@
 # Set to python3
 #!/usr/bin/env python3
 
-import os
+import os, traceback
+import distutils.util
 from time import sleep
 from dotenv import load_dotenv
 from scripts.send_notification import notify
+from scripts.telegram_bot import setup_bot
 from scripts.get_info import get_ratio
 from scripts.terra import execute_swap, check_tx_info, get_balances, setup_message
 
@@ -17,6 +19,7 @@ min_trade_balance = float(os.getenv("MIN_TRADE_BALANCE"))
 min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
 target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
 sleep_duration = float(os.getenv("SLEEP_DURATION"))
+notify_telegram = bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM")))
 
 
 def min_ust_check(
@@ -41,13 +44,15 @@ def min_ust_check(
             luna_balance, bluna_balance, ust_balance = get_balances()
 
             if ust_balance < min_ust_balance:
-                notify(f"Error: UST balance of {ust_balance} should be higher\nExiting")
-                exit(1)
+                message = (
+                    f"Error: UST balance of {ust_balance} should be higher\nExiting"
+                )
+                raise Exception(message)
         else:
-            notify(
-                "Not enough luna to sell while staying above the minimum trade balance"
+            message = (
+                f"Not enough luna to sell while staying above the minimum trade balance"
             )
-            exit(1)
+            raise Exception(message)
     else:
         luna_balance, bluna_balance, ust_balance = get_balances(notify_balance=False)
 
@@ -88,9 +93,11 @@ def luna_bluna_trade(
             # Check to see if the transaction was successful
             # if it failed the luna balance will be higher than the minimum trade balance so it should notify the user and exit
             if luna_balance > min_trade_balance:
-                notify(f"Error: Luna balance of {luna_balance} should be low\nExiting")
-                notify(f"tx_info: {tx_info}")
-                exit(1)
+                message = [
+                    f"Error: Luna balance of {luna_balance} should be low",
+                    f"{tx_info}",
+                ]
+                raise Exception(message)
             else:
                 return luna_balance, bluna_balance, ust_balance
         else:
@@ -132,12 +139,11 @@ def bluna_luna_trade(
             # Check to see if the transaction was successful
             # if it failed the bluna balance will be higher than the minimum trade balance so it should notify the user and exit
             if bluna_balance > min_trade_balance:
-                notify(
-                    f"Error: BLuna balance of {bluna_balance} should be low\nExiting"
-                )
-                notify(f"tx_info: {tx_info}")
-
-                exit(1)
+                message = [
+                    f"Error: BLuna balance of {bluna_balance} should be low\nExiting",
+                    f"{tx_info}",
+                ]
+                raise Exception(message)
             else:
                 return luna_balance, bluna_balance, ust_balance
 
@@ -146,11 +152,15 @@ def bluna_luna_trade(
             sleep(sleep_duration / 2)
 
 
-def main():
+def main() -> None:
     # Check to see if mnemonic is set
     if mnemonic == None or mnemonic == "":
-        notify("Please set your mnemonic in the .env file or enviornment variable")
-        exit(1)
+        raise Exception(
+            "Please set your mnemonic in the .env file or enviornment variable"
+        )
+
+    if notify_telegram:
+        setup_bot()
 
     setup_message()
 
@@ -210,4 +220,24 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+
+    except Exception as error:
+        notify("ERROR!")
+
+        if isinstance(error, list):
+            for message in error:
+                notify(message)
+        else:
+            notify(f"{error}")
+
+        notify("Exiting")
+
+        print(traceback.format_exc())
+
+        os._exit(1)
+
+    except KeyboardInterrupt:
+        notify("Exiting")
+        os._exit(1)
