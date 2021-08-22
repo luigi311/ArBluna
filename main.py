@@ -8,6 +8,15 @@ from scripts.send_notification import notify
 from scripts.get_info import get_ratio
 from scripts.terra import execute_swap, check_tx_info, get_balances, setup_message
 
+load_dotenv()
+
+mnemonic = os.getenv("MNEMONIC")
+luna_to_bluna_ratio = float(os.getenv("LUNA_TO_BLUNA_RATIO"))
+bluna_to_luna_ratio = float(os.getenv("BLUNA_TO_LUNA_RATIO"))
+min_trade_balance = float(os.getenv("MIN_TRADE_BALANCE"))
+min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
+target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
+sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
 def min_ust_check(
     ust_balance: float,
@@ -67,8 +76,8 @@ def luna_bluna_trade(
         if price < minimum:
             minimum = price
 
-        # If the price starts to increase swap for bluna
-        if price > minimum:
+        # If the price starts to increase swap for bluna and price is still below the target ratio
+        if price > minimum and price < luna_to_bluna_ratio:
             notify("Executing trade")
             tx_hash = execute_swap(luna_balance, "bluna", price)
             tx_info = check_tx_info(tx_hash)
@@ -111,8 +120,8 @@ def bluna_luna_trade(
         if price > maximum:
             maximum = price
 
-        # If the price starts to decrease swap for luna
-        if price < maximum:
+        # If the price starts to decrease swap for luna, and price is still above the target ratio
+        if price < maximum and price > bluna_to_luna_ratio:
             notify("Executing trade")
             tx_hash = execute_swap(bluna_balance, "luna", price)
             tx_info = check_tx_info(tx_hash)
@@ -139,20 +148,10 @@ def bluna_luna_trade(
 
 
 def main():
-    load_dotenv()
-
     # Check to see if mnemonic is set
-    mnemonic = os.getenv("MNEMONIC")
     if mnemonic == None or mnemonic == "":
         notify("Please set your mnemonic in the .env file or enviornment variable")
         exit(1)
-
-    buy_ratio = float(os.getenv("BUY_RATIO"))
-    sell_ratio = float(os.getenv("SELL_RATIO"))
-    min_trade_balance = float(os.getenv("MIN_TRADE_BALANCE"))
-    min_ust_balance = float(os.getenv("MIN_UST_BALANCE"))
-    target_ust_balance = float(os.getenv("TARGET_UST_BALANCE"))
-    sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
     setup_message()
 
@@ -178,7 +177,7 @@ def main():
             price = get_ratio("bluna")
 
             # When price is less than the buying ratio start checking for price increase and then swap for bluna
-            if price < buy_ratio:
+            if price < luna_to_bluna_ratio:
                 luna_balance, bluna_balance, ust_balance = luna_bluna_trade(
                     luna_balance, sleep_duration, min_trade_balance
                 )
@@ -199,7 +198,7 @@ def main():
             price = get_ratio("bluna")
 
             # When price is greater than the selling ratio start checking for price decrease and then swap for luna
-            if price > sell_ratio:
+            if price > bluna_to_luna_ratio:
                 luna_balance, bluna_balance, ust_balance = bluna_luna_trade(
                     bluna_balance, sleep_duration, min_trade_balance
                 )
