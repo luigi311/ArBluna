@@ -99,15 +99,16 @@ def execute_swap(amount: float, to_token: str, price: float):
         )
         sold_token = "luna"
     else:
-        print("Invalid Token")
-        exit(1)
+        raise Exception(f"Invalid token {to_token}")
 
     # Set fee to $0.15 UST, needs to be int to remove any decimals before casting to string
     fee = str(int(0.15 * denominator)) + "uusd"
     memo_msg = "ArBluna - https://github.com/luigi311/ArBluna/tree/main"
 
     # Send transaction to execute contract
-    sendtx = wallet.create_and_sign_tx(send, fee=StdFee(denominator, fee), memo=memo_msg)
+    sendtx = wallet.create_and_sign_tx(
+        send, fee=StdFee(denominator, fee), memo=memo_msg
+    )
     result = terra.tx.broadcast(sendtx)
 
     # Notify the user about the transaction
@@ -125,8 +126,7 @@ def check_tx_info(tx_hash: str):
         return tx_look_up_on_chain
 
     except LCDResponseError as err:
-        notify(err)
-        exit(1)
+        raise Exception(err)
 
 
 # Get the balances of all 3 assets and return it as an array
