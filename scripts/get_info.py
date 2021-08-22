@@ -52,7 +52,7 @@ def get_ratio(to_token: str, amount: float):
         value = bluna / luna
     
     # Bluna to Luna
-    if to_token.lower() == "luna":
+    elif to_token.lower() == "luna":
         luna = float(response["result"]["return_amount"])
         bluna = float(amount)
         value = luna / bluna
