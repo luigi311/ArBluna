@@ -101,8 +101,8 @@ def luna_bluna_trade(
             else:
                 return luna_balance, bluna_balance, ust_balance
         else:
-            # Check twice as often to see if the price is increasing or decreasing
-            sleep(sleep_duration / 2)
+            # Delay to avoid spamming the API
+            sleep(sleep_duration)
 
 
 def bluna_luna_trade(
@@ -148,8 +148,8 @@ def bluna_luna_trade(
                 return luna_balance, bluna_balance, ust_balance
 
         else:
-            # Check twice as often to see if the price is increasing or decreasing
-            sleep(sleep_duration / 2)
+            # Delay to avoid spamming the API
+            sleep(sleep_duration)
 
 
 def main() -> None:
