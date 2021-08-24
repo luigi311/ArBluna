@@ -1,4 +1,4 @@
-import os
+import os, requests
 from terra_sdk.client.lcd import LCDClient
 from terra_sdk.key.mnemonic import MnemonicKey
 from terra_sdk.core.coins import Coins
@@ -101,8 +101,9 @@ def execute_swap(amount: float, to_token: str, price: float):
     else:
         raise Exception(f"Invalid token {to_token}")
 
-    # Set fee to $0.15 UST, needs to be int to remove any decimals before casting to string
-    fee = str(int(0.15 * denominator)) + "uusd"
+    # Get fee from terra fcd
+    fees = requests.get("https://fcd.terra.dev/v1/txs/gas_prices").json()
+    fee = str(int(float(fees["uusd"]) * denominator)) + "uusd"
     memo_msg = "ArBluna - https://github.com/luigi311/ArBluna/tree/main"
 
     # Send transaction to execute contract
