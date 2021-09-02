@@ -40,7 +40,7 @@ def min_ust_check(
         # Check to see that we will have enough luna to sell and stay above the minimum set to trade
         if (luna_balance - amount) > min_trade_balance:
             notify("Selling some luna for UST")
-            execute_swap(amount, "ust", price)
+            execute_swap(amount, "uusd", price)
             luna_balance, bluna_balance, ust_balance = get_balances()
 
             if ust_balance < min_ust_balance:
