@@ -50,7 +50,8 @@ When using the notify_telegram option, you can use the following commands with t
 
 -   /help - Show this help message
 -   /ping - Check if the bot is running
--   /bluna - Check the current Luna to Bluna ratio
+-   /luna - Get the bluna -> luna ratio
+-   /bluna - Get the luna -> bluna ratio
 -   /ust - Check the current Luna to UST ratio
 -   /balance - Check the current balances
 -   /swap_to_bluna - To force a swap from luna to bluna
