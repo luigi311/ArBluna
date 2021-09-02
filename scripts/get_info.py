@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-sleep_duration = os.getenv("SLEEP_DURATION")
+sleep_duration = float(os.getenv("SLEEP_DURATION"))
 public_node_url = os.getenv("PUBLIC_NODE_URL")
 
 denominator = 1000000

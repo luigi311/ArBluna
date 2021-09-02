@@ -17,7 +17,7 @@ chain_id = "columbus-4"
 
 public_node_url = os.getenv("PUBLIC_NODE_URL")
 mnemonic = os.getenv("MNEMONIC")
-sleep_duration = os.getenv("SLEEP_DURATION")
+sleep_duration = float(os.getenv("SLEEP_DURATION"))
 
 denominator = 1000000
 
