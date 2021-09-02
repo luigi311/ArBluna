@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+sleep_duration = os.getenv("SLEEP_DURATION")
 public_node_url = os.getenv("PUBLIC_NODE_URL")
+
 denominator = 1000000
 
 # Get price ratio between two tokens,
@@ -53,6 +55,7 @@ def get_ratio(to_token: str, amount: float):
     response = requests.get(
         public_node_url + "/wasm/contracts/" + contract_address + "/store",
         params={"query_msg": query_msg},
+        timeout=sleep_duration,
     ).json()
 
     # Luna to BLuna
@@ -83,7 +86,10 @@ def get_balance(account_address: str, token: str):
 
     # If checking a native token then we can just pull the bank balance of the account
     if token == "uluna" or token == "uusd":
-        response = requests.get(public_node_url + "/bank/balances/" + account_address)
+        response = requests.get(
+            public_node_url + "/bank/balances/" + account_address,
+            timeout=sleep_duration,
+        )
 
     # When checking a contract token like bluna you need to check the contract for the balance of the account
     if token == "bluna":
@@ -91,6 +97,7 @@ def get_balance(account_address: str, token: str):
         response = requests.get(
             public_node_url + "/wasm/contracts/" + bluna_contract + "/store",
             params={"query_msg": query_msg},
+            timeout=sleep_duration,
         )
 
     # If the response was sucessful then we can parse out the balance

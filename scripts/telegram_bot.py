@@ -9,6 +9,7 @@ from scripts.get_info import get_ratio
 from scripts.terra import get_balances, execute_swap
 
 load_dotenv()
+
 notify_telegram = bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM")))
 
 if notify_telegram:
