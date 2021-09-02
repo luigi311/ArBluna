@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 sleep_duration = float(os.getenv("SLEEP_DURATION"))
 public_node_url = os.getenv("PUBLIC_NODE_URL")

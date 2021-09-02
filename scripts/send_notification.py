@@ -4,7 +4,7 @@ import os, requests, json
 import distutils.util
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 def slack_webhook(msg):

@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from scripts.get_info import get_ratio
 from scripts.terra import get_balances, execute_swap
 
-load_dotenv()
+load_dotenv(override=True)
 
 notify_telegram = bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM")))
 
@@ -78,6 +78,7 @@ def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
 
 
 def setup_bot() -> None:
+    print("Starting up telegram bot")
     try:
         # Create the Updater and pass it your bot's token.
         updater = Updater(token, use_context=True)

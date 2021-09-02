@@ -11,7 +11,7 @@ from scripts.get_info import get_balance
 from time import sleep
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 chain_id = "columbus-4"
 
