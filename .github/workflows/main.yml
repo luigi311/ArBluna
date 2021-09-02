@@ -25,7 +25,7 @@ jobs:
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/arbluna # list of Docker images to use as base name for tags
           flavor: |
-            latest=${{ github.ref == 'refs/heads/master' }}
+            latest=${{ github.ref == 'refs/heads/main' }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
