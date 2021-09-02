@@ -159,6 +159,18 @@ def main() -> None:
             "Please set your mnemonic in the .env file or enviornment variable"
         )
 
+    # Exit if luna -> bluna ratio is below 1 to avoid endless swaps
+    if luna_to_bluna_ratio < 1:
+        raise Exception(
+            "Luna_to_bluna_ratio is less than 1. Exiting due to value being to low, set to above 1"
+        )
+
+    # Exit if bluna -> luna ratio is above 1 to avoid misconfiguration
+    if bluna_to_luna_ratio > 1:
+        raise Exception(
+            "bluna_to_luna_ratio is greater than 1. Exiting due to value being to high, set to below 1"
+        )
+
     if notify_telegram:
         setup_bot()
 
