@@ -35,7 +35,7 @@ def min_ust_check(
         # Get luna to UST price
         price = get_ratio("ust", luna_balance)
         # Calculate how much luna to sell to get to target UST balance
-        amount = target_ust_balance / price
+        amount = (target_ust_balance - ust_balance) / price
 
         # Check to see that we will have enough luna to sell and stay above the minimum set to trade
         if (luna_balance - amount) > min_trade_balance:
