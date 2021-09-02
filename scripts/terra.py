@@ -11,11 +11,14 @@ from scripts.get_info import get_balance
 from time import sleep
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 chain_id = "columbus-4"
+
 public_node_url = os.getenv("PUBLIC_NODE_URL")
 mnemonic = os.getenv("MNEMONIC")
+sleep_duration = float(os.getenv("SLEEP_DURATION"))
+
 denominator = 1000000
 
 # Connect to Testnet
@@ -102,7 +105,9 @@ def execute_swap(amount: float, to_token: str, price: float):
         raise Exception(f"Invalid token {to_token}")
 
     # Get fee from terra fcd
-    fees = requests.get("https://fcd.terra.dev/v1/txs/gas_prices").json()
+    fees = requests.get(
+        "https://fcd.terra.dev/v1/txs/gas_prices", timeout=sleep_duration
+    ).json()
     fee = str(int(float(fees["uusd"]) * denominator)) + "uusd"
     memo_msg = "ArBluna - https://github.com/luigi311/ArBluna/tree/main"
 

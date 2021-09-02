@@ -10,7 +10,7 @@ from scripts.telegram_bot import setup_bot
 from scripts.get_info import get_ratio
 from scripts.terra import execute_swap, check_tx_info, get_balances, setup_message
 
-load_dotenv()
+load_dotenv(override=True)
 
 mnemonic = os.getenv("MNEMONIC")
 luna_to_bluna_ratio = float(os.getenv("LUNA_TO_BLUNA_RATIO"))
@@ -157,6 +157,18 @@ def main() -> None:
     if mnemonic == None or mnemonic == "":
         raise Exception(
             "Please set your mnemonic in the .env file or enviornment variable"
+        )
+
+    # Exit if luna -> bluna ratio is below 1 to avoid endless swaps
+    if luna_to_bluna_ratio < 1:
+        raise Exception(
+            f"Luna_to_bluna_ratio {luna_to_bluna_ratio} is less than 1. Exiting due to value being to low, set to above 1"
+        )
+
+    # Exit if bluna -> luna ratio is above 1 to avoid misconfiguration
+    if bluna_to_luna_ratio > 1:
+        raise Exception(
+            f"bluna_to_luna_ratio {bluna_to_luna_ratio} is greater than 1. Exiting due to value being to high, set to below 1"
         )
 
     if notify_telegram:

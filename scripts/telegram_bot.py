@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 from scripts.get_info import get_ratio
 from scripts.terra import get_balances, execute_swap
 
-load_dotenv()
+load_dotenv(override=True)
+
 notify_telegram = bool(distutils.util.strtobool(os.getenv("NOTIFY_TELEGRAM")))
 
 if notify_telegram:
@@ -24,7 +25,7 @@ def ping_command(update: Update, context: CallbackContext) -> None:
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send list of commands when /help is issued."""
     update.message.reply_text(
-        "Commands:\n/ping check if thebot is online\n/bluna get the bluna ratio\n/ust get the ust ratio\n/balance get the balances\n/swap_to_bluna_command to force a swap from luna to bluna\n/swap_to_luna_command to force a swap from bluna to luna"
+        "Commands:\n/ping check if thebot is online\n/luna get the bluna -> luna ratio\n/bluna get the luna -> bluna ratio\n/ust get the ust ratio\n/balance get the balances\n/swap_to_bluna_command to force a swap from luna to bluna\n/swap_to_luna_command to force a swap from bluna to luna"
     )
 
 
@@ -33,14 +34,14 @@ def bluna_command(update: Update, context: CallbackContext) -> None:
     luna_balance, bluna_balance, ust_balance = get_balances(notify_balance=False)
 
     bluna_price = get_ratio("bluna", luna_balance)
-    update.message.reply_text(f"Luna to Bluna ratio: {bluna_price}")
+    update.message.reply_text(f"Luna ->  bLuna ratio: {bluna_price}")
 
 
 def luna_command(update: Update, context: CallbackContext) -> None:
     """Send the current luna to bluna ratio."""
     luna_balance, bluna_balance, ust_balance = get_balances(notify_balance=False)
     bluna_price = get_ratio("luna", bluna_balance)
-    update.message.reply_text(f"BLuna to luna ratio: {bluna_price}")
+    update.message.reply_text(f"bLuna -> Luna ratio: {bluna_price}")
 
 
 def ust_command(update: Update, context: CallbackContext) -> None:
@@ -48,7 +49,7 @@ def ust_command(update: Update, context: CallbackContext) -> None:
     luna_balance, bluna_balance, ust_balance = get_balances(notify_balance=False)
 
     ust_price = get_ratio("ust", luna_balance)
-    update.message.reply_text(f"Luna to UST price: {ust_price}")
+    update.message.reply_text(f"Luna -> UST price: {ust_price}")
 
 
 def balance_command(update: Update, context: CallbackContext) -> None:
@@ -63,7 +64,7 @@ def swap_to_bluna_command(update: Update, context: CallbackContext) -> None:
     if luna_balance > 0 and ust_balance > 0.15:
         execute_swap(luna_balance, "bluna", price)
     else:
-        raise Exception(f"Not enough luna {luna_balance} or ust {ust_balance}")
+        raise Exception(f"Not enough Luna {luna_balance} or UST {ust_balance}")
 
 
 def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
@@ -73,10 +74,11 @@ def swap_to_luna_command(update: Update, context: CallbackContext) -> None:
     if bluna_balance > 0 and ust_balance > 0.15:
         execute_swap(bluna_balance, "luna", price)
     else:
-        raise Exception(f"Not enough bluna {bluna_balance} or ust {ust_balance}")
+        raise Exception(f"Not enough bLuna {bluna_balance} or UST {ust_balance}")
 
 
 def setup_bot() -> None:
+    print("Starting up telegram bot")
     try:
         # Create the Updater and pass it your bot's token.
         updater = Updater(token, use_context=True)
