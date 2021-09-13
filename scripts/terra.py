@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, base64
 from terra_sdk.client.lcd import LCDClient
 from terra_sdk.key.mnemonic import MnemonicKey
 from terra_sdk.core.coins import Coins
@@ -18,6 +18,7 @@ chain_id = "columbus-4"
 public_node_url = os.getenv("PUBLIC_NODE_URL")
 mnemonic = os.getenv("MNEMONIC")
 sleep_duration = float(os.getenv("SLEEP_DURATION"))
+spread = float(os.getenv("MAX_SPREAD"))
 
 denominator = 1000000
 
@@ -51,6 +52,8 @@ def execute_swap(amount: float, to_token: str, price: float):
                 contract=luna_bluna_pair_address,
                 execute_msg={
                     "swap": {
+                        "belief_price": str(price),
+                        "max_spread": str(spread),
                         "offer_asset": {
                             "info": {"native_token": {"denom": "uluna"}},
                             "amount": str(int(amount)),
@@ -65,6 +68,15 @@ def execute_swap(amount: float, to_token: str, price: float):
     # When swapping to luna, create structure for contract token to native token swap
     # Must point to luna_bluna_pair_address, it will automatically pull in the bLuna coin and send the luna to the sender address
     elif to_token == "luna":
+        encode_message = (
+            '{"swap":{"belief_price": "'
+            + str(price)
+            + '","max_spread": "'
+            + str(spread)
+            + '"}}'
+        )
+        message_bytes = encode_message.encode("ascii")
+        base64_message = base64.b64encode(message_bytes)
         send = (
             MsgExecuteContract(
                 sender=account_address,
@@ -73,7 +85,7 @@ def execute_swap(amount: float, to_token: str, price: float):
                     "send": {
                         "contract": luna_bluna_pair_address,
                         "amount": str(int(amount)),
-                        "msg": "eyJzd2FwIjp7fX0=",
+                        "msg": str(base64_message)[2:-1],
                     }
                 },
                 coins=Coins(),
@@ -91,10 +103,12 @@ def execute_swap(amount: float, to_token: str, price: float):
                 contract=luna_ust_pair_address,
                 execute_msg={
                     "swap": {
+                        "belief_price": str(price),
+                        "max_spread": str(spread),
                         "offer_asset": {
                             "info": {"native_token": {"denom": "uluna"}},
                             "amount": str(int(amount)),
-                        }
+                        },
                     }
                 },
                 coins=coins,
@@ -161,5 +175,5 @@ def setup_message():
     notify("terra18unmcxtftdkuqzqflzce9nmvyr07wfah43ps2m")
 
     notify(
-        f"Config\nConverting luna to bluna above {luna_to_bluna_ratio}\nConverting bluna to luna above {bluna_to_luna_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
+        f"Config\nConverting luna to bluna above {luna_to_bluna_ratio}\nConverting bluna to luna above {bluna_to_luna_ratio}\nMinimum (b)luna to trade {min_trade_balance}\nMinimum UST Balance {min_ust_balance}\nTarget UST Balance {target_ust_balance}\nMax Spread: {spread}\nChecking every {sleep_duration} seconds\nWallet {account_address}"
     )
