@@ -19,6 +19,7 @@ ENV PUBLIC_NODE_URL=https://lcd.terra.dev
 ENV LUNA_UST_PAIR_ADDRESS=terra1tndcaqxkpc5ce9qee5ggqf430mr2z3pefe5wj6
 ENV LUNA_BLUNA_PAIR_ADDRESS=terra1jxazgm67et0ce260kvrpfv50acuushpjsz2y0p
 ENV BLUNA_CONTRACT=terra1kc87mu460fwkqte29rquh4hc20m54fxwtsx7gp
+ENV MAX_SPREAD=0.01
 
 # Install pip requirements
 COPY requirements.txt .
